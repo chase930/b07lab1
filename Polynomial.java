@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -127,7 +125,6 @@ public class Polynomial {
     
         return new Polynomial(finalCoefficients, finalExponents);
     }
-    
 
     public double evaluate(double x) {
         int len = this.coefficients.length;
