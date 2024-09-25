@@ -92,7 +92,7 @@ public class Polynomial {
     }
 
     public Polynomial multiply(Polynomial p) {
-        int maxExponent = this.exponents[this.exponents.length - 1] + p.exponents[p.exponents.length - 1]; // Maximum possible exponent in the result.
+        int maxExponent = this.exponents[this.exponents.length - 1] + p.exponents[p.exponents.length - 1]; 
         
         double[] resultCoefficients = new double[maxExponent + 1];
         
