@@ -47,8 +47,8 @@ public class Driver {
             System.out.println("Finally executed");
         }
 
-        double c3[] = {1, 2};
-        int e3[] = {0, 2};
+        double c3[] = {1, 2, 4};
+        int e3[] = {0, 2, 5};
         Polynomial three = new Polynomial(c3, e3);
 
         double c4[] = {2, 1};

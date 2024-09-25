@@ -27,8 +27,8 @@ public class Polynomial {
     }
 
     public Polynomial(File file) throws IOException {
-        ArrayList<Double> coefficientsList = new ArrayList<>();
-        ArrayList<Integer> exponentsList = new ArrayList<>();
+        double[] coefficientsList = new double[100];
+        int[] exponentsList = new int[100];
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line = reader.readLine();
@@ -43,13 +43,14 @@ public class Polynomial {
             if (parts.length > 1) {
                 exponent = parts[1].isEmpty() ? 1 : Integer.parseInt(parts[1]);
             }
-
-            coefficientsList.add(coefficient);
-            exponentsList.add(exponent);
+            
+            int index = 0;
+            coefficientsList[index] = coefficient;
+            exponentsList[index] = exponent;
         }
 
-        this.coefficients = coefficientsList.stream().mapToDouble(d -> d).toArray();
-        this.exponents = exponentsList.stream().mapToInt(i -> i).toArray();
+        this.coefficients = coefficientsList;
+        this.exponents = exponentsList;
 
         reader.close();
     }
