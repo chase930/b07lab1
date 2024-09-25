@@ -46,5 +46,17 @@ public class Driver {
         finally {
             System.out.println("Finally executed");
         }
+
+        double c3[] = {1, 2};
+        int e3[] = {0, 2};
+        Polynomial three = new Polynomial(c3, e3);
+
+        double c4[] = {2, 1};
+        int e4[] = {1, 3};
+        Polynomial four = new Polynomial(c4, e4);
+
+        Polynomial q = three.multiply(four);
+
+        System.out.println(q.evaluate(1));
     }
 }

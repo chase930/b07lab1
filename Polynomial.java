@@ -60,69 +60,74 @@ public class Polynomial {
         int maxLength = this.coefficients.length + p.coefficients.length;
         double[] newCoefficients = new double[maxLength];
         int[] newExponents = new int[maxLength];
-
-        HashMap<Integer, Double> combined = new HashMap<>();
-
-        for (int i = 0; i < this.coefficients.length; i++) {
-            combined.put(this.exponents[i], combined.getOrDefault(this.exponents[i], 0.0) + this.coefficients[i]);
-        }
-
-        for (int i = 0; i < p.coefficients.length; i++) {
-            combined.put(p.exponents[i], combined.getOrDefault(p.exponents[i], 0.0) + p.coefficients[i]);
-        }
-
+    
         int index = 0;
-        for (Map.Entry<Integer, Double> entry : combined.entrySet()) {
-            newExponents[index] = entry.getKey();
-            newCoefficients[index] = entry.getValue();
+    
+        for (int i = 0; i < this.coefficients.length; i++) {
+            newCoefficients[index] = this.coefficients[i];
+            newExponents[index] = this.exponents[i];
             index++;
         }
-
+    
+        for (int i = 0; i < p.coefficients.length; i++) {
+            boolean found = false;
+            for (int j = 0; j < index; j++) {
+                if (newExponents[j] == p.exponents[i]) {
+                    newCoefficients[j] += p.coefficients[i];
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                newCoefficients[index] = p.coefficients[i];
+                newExponents[index] = p.exponents[i];
+                index++;
+            }
+        }
+    
         double[] finalCoefficients = new double[index];
         int[] finalExponents = new int[index];
         System.arraycopy(newCoefficients, 0, finalCoefficients, 0, index);
         System.arraycopy(newExponents, 0, finalExponents, 0, index);
     
-        Polynomial newPolynomial = new Polynomial(finalCoefficients, finalExponents);
-    
-        return newPolynomial;
+        return new Polynomial(finalCoefficients, finalExponents);
     }
 
     public Polynomial multiply(Polynomial p) {
-        int maxLength = this.coefficients.length * p.coefficients.length;
-        double[] newCoefficients = new double[maxLength];
-        int[] newExponents = new int[maxLength];
-
-        int index = 0;
-
+        int maxExponent = this.exponents[this.exponents.length - 1] + p.exponents[p.exponents.length - 1]; // Maximum possible exponent in the result.
+        
+        double[] resultCoefficients = new double[maxExponent + 1];
+        
         for (int i = 0; i < this.coefficients.length; i++) {
             for (int j = 0; j < p.coefficients.length; j++) {
-                newCoefficients[index] = this.coefficients[i] * p.coefficients[j];
-                newExponents[index] = this.exponents[i] + p.exponents[j];
+                int newExponent = this.exponents[i] + p.exponents[j];
+                double newCoefficient = this.coefficients[i] * p.coefficients[j];
+                resultCoefficients[newExponent] += newCoefficient;
+            }
+        }
+    
+        int nonZeroCount = 0;
+        for (double coefficient : resultCoefficients) {
+            if (coefficient != 0.0) {
+                nonZeroCount++;
+            }
+        }
+    
+        double[] finalCoefficients = new double[nonZeroCount];
+        int[] finalExponents = new int[nonZeroCount];
+    
+        int index = 0;
+        for (int exponent = 0; exponent < resultCoefficients.length; exponent++) {
+            if (resultCoefficients[exponent] != 0.0) {
+                finalCoefficients[index] = resultCoefficients[exponent];
+                finalExponents[index] = exponent;
                 index++;
             }
         }
-
-        HashMap<Integer, Double> combined = new HashMap<>();
-
-        for (int i = 0; i < index; i++) {
-            combined.put(newExponents[i], combined.getOrDefault(newExponents[i], 0.0) + newCoefficients[i]);
-        }
-
-        double[] finalCoefficients = new double[combined.size()];
-        int[] finalExponents = new int[combined.size()];
-
-        int index2 = 0;
-        for (Map.Entry<Integer, Double> entry : combined.entrySet()) {
-            finalExponents[index2] = entry.getKey();
-            finalCoefficients[index2] = entry.getValue();
-            index2++;
-        }
-
-        Polynomial newPolynomial = new Polynomial(finalCoefficients, finalExponents);
     
-        return newPolynomial;
+        return new Polynomial(finalCoefficients, finalExponents);
     }
+    
 
     public double evaluate(double x) {
         int len = this.coefficients.length;
